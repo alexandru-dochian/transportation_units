@@ -10,7 +10,7 @@
   },
   "scripts": {
     "startWatch" : "tsc --watch",
-    "startDevServer": "http-server --port 3000 build",
+    "startDevServer": "http-server --port 3000 docs",
     "start": "concurrently --kill-others \"npm run startWatch\" \"npm run startDevServer\""
 
   }
