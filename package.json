@@ -1,0 +1,17 @@
+{
+  "name": "transportation_units",
+  "author": "Alexandru Dochian",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "devDependencies": {
+    "concurrently": "^7.5.0",
+    "http-server": "^14.1.1",
+    "typescript": "^4.9.3"
+  },
+  "scripts": {
+    "startWatch" : "tsc --watch",
+    "startDevServer": "http-server --port 3000 build",
+    "start": "concurrently --kill-others \"npm run startWatch\" \"npm run startDevServer\""
+
+  }
+}
