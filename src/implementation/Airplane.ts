@@ -1,10 +1,8 @@
 import TransportationUnit from "../abstract/TransportationUnit.js";
 
 export default class Airplane extends TransportationUnit implements Printable {
-    private static SPEED = 250;
-    
-    constructor(id: number) {
-        super(id, Airplane.SPEED)
+    constructor(id: number, speed: number) {
+        super(id, speed);
     }
 
     display(): void {

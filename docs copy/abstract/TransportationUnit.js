@@ -5,11 +5,6 @@ export default class TransportationUnit {
     distance;
     timerId;
     constructor(id, speed) {
-        if (speed <= 0) {
-            const errorMessage = "Speed cannot be negative!";
-            alert(errorMessage);
-            throw new Error(errorMessage);
-        }
         this.id = id;
         this.speed = speed;
         this.distance = 0;
