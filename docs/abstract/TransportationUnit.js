@@ -3,18 +3,24 @@ export default class TransportationUnit {
     id;
     speed;
     distance;
+    lastStartedTime;
+    lastStartedTimeDistance;
     timerId;
     constructor(id, speed) {
         if (speed <= 0) {
-            const errorMessage = "Speed cannot be negative!";
+            const errorMessage = "Speed should be greater than 0!";
             alert(errorMessage);
             throw new Error(errorMessage);
         }
         this.id = id;
         this.speed = speed;
         this.distance = 0;
+        this.lastStartedTime = Date.now();
+        this.lastStartedTimeDistance = 0;
     }
     start() {
+        this.lastStartedTime = Date.now();
+        this.lastStartedTimeDistance = this.distance;
         this.timerId = setInterval(() => this.updateDistance(), TransportationUnit.UPDATE_TIME);
     }
     stop() {
@@ -26,9 +32,12 @@ export default class TransportationUnit {
     isStarted() {
         return this.timerId != undefined;
     }
+    isPrintable() {
+        return "display" in this;
+    }
     updateDistance() {
-        const time = TransportationUnit.UPDATE_TIME / 1000;
-        this.distance += (this.speed * time);
+        const time = (Date.now() - this.lastStartedTime) / 1000;
+        this.distance = this.lastStartedTimeDistance + this.speed * time;
         this.distance = parseFloat(this.distance.toFixed(2));
     }
 }

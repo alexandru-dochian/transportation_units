@@ -4,6 +4,12 @@ export default class Airplane extends TransportationUnit {
         super(id, speed);
     }
     display() {
-        throw new Error("Method not implemented.");
+        alert(`Hello from Airplane with id [${this.id}] and speed [${this.speed}]!`);
+    }
+    rising() {
+        alert(`Airplane with id [${this.id}] is rising!`);
+    }
+    dropping() {
+        alert(`Airplane with id [${this.id}] is dropping!`);
     }
 }

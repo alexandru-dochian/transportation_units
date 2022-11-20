@@ -11,6 +11,9 @@ export default class TransportationUnitService {
     findAll() {
         return this.transporationUnits;
     }
+    findAllStarted() {
+        return this.transporationUnits.filter((transporationUnit) => transporationUnit.isStarted());
+    }
     findById(transportationUnitId) {
         return (this.transporationUnits.find((transportationUnit) => transportationUnit.id === transportationUnitId));
     }
@@ -20,25 +23,29 @@ export default class TransportationUnitService {
         return newTransportationUnit;
     }
     getInitialTransportationUnits() {
-        return [this.getTransportationUnit({
-                "transportationUnitType": "Car",
-                "speed": 40
-            }), this.getTransportationUnit({
-                "transportationUnitType": "Truck",
-                "speed": 40
-            }), this.getTransportationUnit({
-                "transportationUnitType": "Airplane",
-                "speed": 40
-            })];
+        return [
+            this.getTransportationUnit({
+                transportationUnitType: "Car",
+                speed: 50,
+            }),
+            this.getTransportationUnit({
+                transportationUnitType: "Truck",
+                speed: 30,
+            }),
+            this.getTransportationUnit({
+                transportationUnitType: "Airplane",
+                speed: 200,
+            }),
+        ];
     }
-    getTransportationUnit(transportationUnitDTO) {
-        switch (transportationUnitDTO.transportationUnitType) {
+    getTransportationUnit(modalValuesDTO) {
+        switch (modalValuesDTO.transportationUnitType) {
             case "Car":
-                return new Car(this.generator.next().value, transportationUnitDTO.speed);
+                return new Car(this.generator.next().value, modalValuesDTO.speed);
             case "Truck":
-                return new Truck(this.generator.next().value, transportationUnitDTO.speed);
+                return new Truck(this.generator.next().value, modalValuesDTO.speed);
             case "Airplane":
-                return new Airplane(this.generator.next().value, transportationUnitDTO.speed);
+                return new Airplane(this.generator.next().value, modalValuesDTO.speed);
             default:
                 throw new Error("Transportation type does not exist!");
         }

@@ -6,6 +6,16 @@ export default class Truck extends TransportationUnit implements Printable {
     }
 
     display(): void {
-        throw new Error("Method not implemented.");
+        alert(
+            `Hello from Truck with id [${this.id}] and speed [${this.speed}]!`
+        );
+    }
+
+    public load(): void {
+        alert(`Truck with id [${this.id}] is loading!`);
+    }
+
+    public unloading(): void {
+        alert(`Truck with id [${this.id}] is unloading!`);
     }
 }

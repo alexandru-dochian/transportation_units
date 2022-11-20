@@ -1,3 +1,3 @@
 interface Printable {
-    display(): void
+    display(): void;
 }

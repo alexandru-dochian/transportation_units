@@ -6,6 +6,16 @@ export default class Airplane extends TransportationUnit implements Printable {
     }
 
     display(): void {
-        throw new Error("Method not implemented.");
+        alert(
+            `Hello from Airplane with id [${this.id}] and speed [${this.speed}]!`
+        );
+    }
+
+    public rising(): void {
+        alert(`Airplane with id [${this.id}] is rising!`);
+    }
+
+    public dropping(): void {
+        alert(`Airplane with id [${this.id}] is dropping!`);
     }
 }

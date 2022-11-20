@@ -4,6 +4,12 @@ export default class Truck extends TransportationUnit {
         super(id, speed);
     }
     display() {
-        throw new Error("Method not implemented.");
+        alert(`Hello from Truck with id [${this.id}] and speed [${this.speed}]!`);
+    }
+    load() {
+        alert(`Truck with id [${this.id}] is loading!`);
+    }
+    unloading() {
+        alert(`Truck with id [${this.id}] is unloading!`);
     }
 }

@@ -1,9 +1,9 @@
 # Start
-Start the development server and the compiler in watch mode: <br/>
-http://localhost:3000
+Start the development server and the compiler in watch mode:
 ```
- npm run devServer
+ npm start
 ```
+The application will be accessible at http://localhost:3000 
 
 
 # TODO

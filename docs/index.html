@@ -12,39 +12,41 @@
             <div class="row">
                 <h1>Transportation Units</h1>
             </div>
-            <table id="mainTable">
-                <thead>
-                    <th>ID</th>
-                    <th>Transportation Type</th>
-                    <th>Speed (m/s)</th>
-                    <th>Distance (m)</th>
-                    <th>Control</th>
-                </thead>
-            </table>
+            <div class="row">
+                <table id="mainTable">
+                    <thead>
+                        <th>ID</th>
+                        <th>Transportation Type</th>
+                        <th>Speed (m/s)</th>
+                        <th>Distance (m)</th>
+                        <th>Control</th>
+                        <th>Display</th>
+                    </thead>
+    
+                </table>
+            </div>
             <div class="row">
                 <button id="addButton"><i class="fa fa-plus-circle" aria-hidden="true"></i></button>
             </div>
         </div>
         <div id="overlay">
-            <div id="modal">
-                <div class="modalBody">
-                    <h4>Create new transportation unit</h2>
-                    <form>
-                        <label for="name">Tranportation unit type:</label>
-                        <select name="transportationUnitType" id="transportationUnitType">
-                            <option value="Car">Car</option>
-                            <option value="Airplane">Airplane</option>
-                            <option value="Truck">Truck</option>
-                          </select>
-                        <br>
-                        <label for="speed">Speed:</label>
-                        <input type="number" id="speed" name="speed" value="0">
-                        <br>
-                        <br>
-                        <input type="submit" value="Create" id="createTransportationUnit">
-                        <input type="submit" value="Cancel" id="cancelModal">
-                      </form> 
-                </div>
+            <div id="createTransportationUnitModal">
+                <h4>Create new transportation unit</h2>
+                <form>
+                    <label for="name">Tranportation unit type:</label>
+                    <select name="transportationUnitType" id="transportationUnitType">
+                        <option value="Car">Car</option>
+                        <option value="Airplane">Airplane</option>
+                        <option value="Truck">Truck</option>
+                        </select>
+                    <br>
+                    <label for="speed">Speed:</label>
+                    <input type="number" id="speed" name="speed" value="0">
+                    <br>
+                    <br>
+                    <input type="submit" value="Create" id="createTransportationUnit">
+                    <input type="submit" value="Cancel" id="cancelModal">
+                    </form> 
             </div>
         </div>
     </body>

@@ -1,54 +1,47 @@
-import TransportationUnitService from "./services/TransportationUnitService.js";
-export class Application {
+import TransportationUnitService from "../services/TransportationUnitService.js";
+import DOMHelper from "./DOMHelper.js";
+export default class MainTable {
+    mainTableHTMLElement;
     transportationUnitService;
-    modalHTMLelement;
-    overlayHTMLelement;
-    table;
     constructor() {
+        this.mainTableHTMLElement = (document.getElementById("mainTable"));
         this.transportationUnitService = new TransportationUnitService();
-        this.modalHTMLelement = document.getElementById("modal");
-        this.overlayHTMLelement = (document.getElementById("overlay"));
-        this.table = document.getElementById("mainTable");
-        this.initEventListeners();
+        this.initDefaultData();
     }
-    start() {
+    handleCreateTransportationUnit(modalValuesDTO) {
+        const transportationUnit = this.transportationUnitService.createNewTransportationUnit(modalValuesDTO);
+        this.addToTable(transportationUnit);
+    }
+    initDefaultData() {
         this.transportationUnitService
             .findAll()
             .forEach((transportationUnit) => {
             transportationUnit.start();
-            this.addToMainTable(transportationUnit);
+            this.addToTable(transportationUnit);
         });
-        setInterval(() => this.updateDom(), 120);
+        setInterval(() => this.updateTable(), 120);
     }
-    initEventListeners() {
-        const addButtonHandler = document.getElementById("addButton");
-        addButtonHandler?.addEventListener("click", (e) => this.handleAddButton(e));
-        const cancelModalButtonHandler = document.getElementById("cancelModal");
-        cancelModalButtonHandler?.addEventListener("click", (e) => this.handleCancelModal(e));
-        const createTransportationUnitButtonHandler = document.getElementById("createTransportationUnit");
-        createTransportationUnitButtonHandler?.addEventListener("click", (e) => this.handleCreateTransportationUnit(e));
-    }
-    addToMainTable(transportationUnit) {
-        const htmlTableRowElement = (this.table?.insertRow());
+    addToTable(transportationUnit) {
+        const htmlTableRowElement = (this.mainTableHTMLElement?.insertRow());
         htmlTableRowElement.id = transportationUnit.id.toString();
         let htmlTableCellElement = (htmlTableRowElement.insertCell());
         htmlTableCellElement.title = "id";
-        htmlTableCellElement.appendChild(this.getHTMLText(transportationUnit.id.toString()));
+        htmlTableCellElement.appendChild(DOMHelper.getHTMLText(transportationUnit.id.toString()));
         htmlTableCellElement = (htmlTableRowElement.insertCell());
         htmlTableCellElement.title = "name";
-        htmlTableCellElement.appendChild(this.getHTMLText(transportationUnit.constructor.name));
+        htmlTableCellElement.appendChild(DOMHelper.getHTMLText(transportationUnit.constructor.name));
         htmlTableCellElement = (htmlTableRowElement.insertCell());
         htmlTableCellElement.title = "title";
-        htmlTableCellElement.appendChild(this.getHTMLText(transportationUnit.speed.toString()));
+        htmlTableCellElement.appendChild(DOMHelper.getHTMLText(transportationUnit.speed.toString()));
         htmlTableCellElement = (htmlTableRowElement.insertCell());
         htmlTableCellElement.title = "distance";
-        htmlTableCellElement.appendChild(this.getHTMLText(transportationUnit.distance.toString()));
+        htmlTableCellElement.appendChild(DOMHelper.getHTMLText(transportationUnit.distance.toString()));
         htmlTableCellElement = (htmlTableRowElement.insertCell());
         htmlTableCellElement.title = "action";
         htmlTableCellElement.appendChild(this.getTransportationUnitActionButton(transportationUnit));
-    }
-    getHTMLText(textString) {
-        return document.createTextNode(textString);
+        htmlTableCellElement = (htmlTableRowElement.insertCell());
+        htmlTableCellElement.title = "display";
+        htmlTableCellElement.appendChild(this.getTransportationUnitDisplay(transportationUnit));
     }
     getTransportationUnitActionButton(transportationUnit) {
         const iconClass = transportationUnit.isStarted()
@@ -67,12 +60,27 @@ export class Application {
         });
         return button;
     }
-    handleAddButton(e) {
-        e.preventDefault();
-        if (this.modalHTMLelement && this.overlayHTMLelement) {
-            this.modalHTMLelement.classList.add("active");
-            this.overlayHTMLelement.classList.add("active");
+    getTransportationUnitDisplay(transportationUnit) {
+        if (!transportationUnit.isPrintable()) {
+            return document.createElement("div");
         }
+        const iconClass = "fa-eye";
+        const buttonClass = `button-${iconClass}`;
+        const icon = document.createElement("i");
+        icon.classList.add("fa", iconClass);
+        icon.setAttribute("aria-hidden", "true");
+        const button = document.createElement("button");
+        button.classList.add(buttonClass);
+        button.appendChild(icon);
+        button.addEventListener("click", (e) => {
+            e.preventDefault();
+            this.handleTransportationUnitDisplayAction(transportationUnit.id);
+        });
+        return button;
+    }
+    handleTransportationUnitDisplayAction(transportationUnitId) {
+        const transportationUnit = this.transportationUnitService.findById(transportationUnitId);
+        alert(`[${transportationUnit.constructor.name}] with id [${transportationUnit.id}] and speed [${transportationUnit.speed}] says Hello!`);
     }
     handleTransporationUnitAction(transportationUnitId) {
         const transportationUnit = this.transportationUnitService.findById(transportationUnitId);
@@ -84,38 +92,9 @@ export class Application {
         }
         this.synchronizeTransportationUnit(transportationUnit, true);
     }
-    handleCancelModal(e) {
-        e.preventDefault();
-        this.closeModal();
-    }
-    handleCreateTransportationUnit(e) {
-        e.preventDefault();
-        const modalValuesDTO = this.getModalValuesDTO();
-        const transportationUnit = this.transportationUnitService.createNewTransportationUnit(modalValuesDTO);
-        this.addToMainTable(transportationUnit);
-        this.closeModal();
-    }
-    getModalValuesDTO() {
-        let transportationUnitType = this.getInputValue("transportationUnitType");
-        let speed = this.getInputValue("speed");
-        return {
-            transportationUnitType: transportationUnitType,
-            speed: speed,
-        };
-    }
-    getInputValue(inputId) {
-        let input = document.getElementById(inputId);
-        return input?.value;
-    }
-    closeModal() {
-        if (this.modalHTMLelement && this.overlayHTMLelement) {
-            this.modalHTMLelement.classList.remove("active");
-            this.overlayHTMLelement.classList.remove("active");
-        }
-    }
-    updateDom() {
+    updateTable() {
         this.transportationUnitService
-            .findAll()
+            .findAllStarted()
             .forEach((transportationUnit) => this.synchronizeTransportationUnit(transportationUnit));
     }
     synchronizeTransportationUnit(transportationUnit, updateButton = false) {

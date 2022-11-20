@@ -1,6 +1,5 @@
 import TransportationUnit from "../abstract/TransportationUnit.js";
-import ModalValuesDTO from "../dto/ModalValuesDTO.js";
-import TransportationunitDTO from "../dto/TransportationUnitDTO.js";
+import ModalValuesDTO from "../components/resources/ModalValuesDTO.js";
 import Airplane from "../implementation/Airplane.js";
 import Car from "../implementation/Car.js";
 import Truck from "../implementation/Truck.js";
@@ -16,6 +15,13 @@ export default class TransportationUnitService {
 
     public findAll(): TransportationUnit[] {
         return this.transporationUnits;
+    }
+
+    public findAllStarted(): TransportationUnit[] {
+        return this.transporationUnits.filter(
+            (transporationUnit: TransportationUnit) =>
+                transporationUnit.isStarted()
+        );
     }
 
     public findById(transportationUnitId: number): TransportationUnit {
@@ -37,36 +43,40 @@ export default class TransportationUnitService {
     }
 
     private getInitialTransportationUnits(): TransportationUnit[] {
-        return [this.getTransportationUnit({
-            "transportationUnitType": "Car",
-            "speed": 40
-        }), this.getTransportationUnit({
-            "transportationUnitType": "Truck",
-            "speed": 40
-        }), this.getTransportationUnit({
-            "transportationUnitType": "Airplane",
-            "speed": 40
-        })];
+        return [
+            this.getTransportationUnit({
+                transportationUnitType: "Car",
+                speed: 50,
+            }),
+            this.getTransportationUnit({
+                transportationUnitType: "Truck",
+                speed: 30,
+            }),
+            this.getTransportationUnit({
+                transportationUnitType: "Airplane",
+                speed: 200,
+            }),
+        ];
     }
 
     private getTransportationUnit(
-        transportationUnitDTO: TransportationunitDTO
+        modalValuesDTO: ModalValuesDTO
     ): TransportationUnit {
-        switch (transportationUnitDTO.transportationUnitType) {
+        switch (modalValuesDTO.transportationUnitType) {
             case "Car":
                 return new Car(
                     this.generator.next().value,
-                    transportationUnitDTO.speed
+                    modalValuesDTO.speed
                 );
             case "Truck":
                 return new Truck(
                     this.generator.next().value,
-                    transportationUnitDTO.speed
+                    modalValuesDTO.speed
                 );
             case "Airplane":
                 return new Airplane(
                     this.generator.next().value,
-                    transportationUnitDTO.speed
+                    modalValuesDTO.speed
                 );
             default:
                 throw new Error("Transportation type does not exist!");
